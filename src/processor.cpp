@@ -89,7 +89,7 @@ void processor::findTemperatures()
             found = true;
             temperatureFilePath = fileName.replace(fileName.find("/name"), 5, "");
             tempSensor = "coretemp";
-            std::cout << temperatureFilePath;
+            //std::cout << temperatureFilePath;
             file.close();
             return;
         }
@@ -106,7 +106,6 @@ void processor::findTemperatures()
     //No coretemp sensor found, attemp to find x86_pkg_temp 
     if(!found)
     {
-         std::cout << "we in here";
         fileName = "/sys/class/thermal/thermal_zone0/type";
         file.open(fileName);
         while(file)
@@ -116,7 +115,7 @@ void processor::findTemperatures()
             {
                 temperatureFilePath = fileName.replace(fileName.find("/type"), 5, "");\
                 tempSensor = "x86_pkg_temp";
-                std::cout << temperatureFilePath;
+                //std::cout << temperatureFilePath;
                 file.close();
                 return;
             }
@@ -185,7 +184,7 @@ bool processor::isHyperThreaded()
 std::string processor::getModel()
 {
     if(pi.model.empty())
-        return "NOT FOUND";
+        return "MODEL NOT FOUND";
     return pi.model;
 }
 
