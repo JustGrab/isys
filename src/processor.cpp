@@ -1,3 +1,9 @@
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <experimental/filesystem>
+#include <assert.h>
+
 #include "processor.hpp"
 
 

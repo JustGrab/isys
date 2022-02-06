@@ -1,10 +1,7 @@
 #pragma once
-#include <fstream>
-#include <iostream>
-#include <sstream>
+
 #include <vector>
-#include <experimental/filesystem>
-#include <assert.h>
+#include <string>
 
 #define MAXCORE 1024
 #define CPUMODELFILE "/proc/cpuinfo"
