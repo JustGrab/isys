@@ -14,7 +14,9 @@ int main() {
 
     while(1)
     {
-        //g.findInfo();
+        g.findInfo();
+        g.getFanSpeeds();
+        std::cout << "GPU WATTAGE: " << g.getWatts() << "W" << std::endl;
         std::cout << "GPU TEMP: " << g.getTemp() << std::endl;
         p.updateTemperatures();
         p.printTemps(); 

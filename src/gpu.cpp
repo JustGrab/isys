@@ -2,6 +2,9 @@
 #include <iostream>
 
 #include "gpu.hpp"
+
+//Implement Error Macro
+
 gpu::gpu(/* args */)
 {
     nvmlReturn_t result = nvmlInit_v2();
@@ -18,12 +21,11 @@ gpu::gpu(/* args */)
 bool gpu::reinit()
 {
     nvmlReturn_t result = nvmlInit_v2();
-    if (result != NVML_SUCCESS)
-    { 
-        std::cout << "Unable to load NVML: "<< nvmlErrorString(result) << std::endl;
+    nvmlDeviceGetHandleByIndex_v2(0, &device);
+    if(result != NVML_SUCCESS)
+    {
         return false;
     }
-    nvmlDeviceGetHandleByIndex_v2(0, &device);
     return true;
 }
 
@@ -34,17 +36,21 @@ gpu::~gpu()
 
 void gpu::findInfo()
 {
-    //Unimplemented
+    nvmlDeviceGetHandleByIndex(0, &device);
+    nvmlBrandType_t type;
+    result = nvmlDeviceGetBrand(device, &type);
+    if(result != NVML_SUCCESS)
+    {
+        std::cout << "Failed to find devices: " << nvmlErrorString(result) << std::endl;
+        return;
+    }
+    std::cout << type << "          ";
+    //result = nvmlSystemGetDriverVersion(info.driver, 15);
 }
 
 unsigned int gpu::getTemp()
 {
     unsigned int temperature; 
-    //if (result != NVML_SUCCESS)
-    //{ 
-     //   std::cout << "Unable to load NVML3: "<< nvmlErrorString(result) << std::endl;
-      //  return 1;
-    //}
     result = nvmlDeviceGetHandleByIndex(0, &device);
     if(result != NVML_SUCCESS)
     {
@@ -63,21 +69,26 @@ unsigned int gpu::getTemp()
 unsigned int gpu::getWatts()
 {
     unsigned int power;
-    nvmlDevice_t device;
-    nvmlReturn_t result = nvmlInit();
-    if (result != NVML_SUCCESS)
-    { 
-        std::cout << "Unable to load NVML2: "<< nvmlErrorString(result) << std::endl;
-        return 0;
-    }
     nvmlDeviceGetHandleByIndex(0, &device);
     result = nvmlDeviceGetPowerUsage(device, &power);
 
-    //result = nvmlSystemGetDriverVersion(info.driver, 15);
     if(result != NVML_SUCCESS)
     {
         std::cout << "ERROR: " << nvmlErrorString(result) << std::endl;
         return 0;
     }
-    return power;
+    return power / 1000;
+}
+
+void gpu::getFanSpeeds()
+{
+    result = nvmlDeviceGetFanSpeed_v2(device, 0, &fanSpeeds);
+    if(result != NVML_SUCCESS)
+    {
+        std::cout << "ERROR: " << nvmlErrorString(result) << std::endl;
+        return;
+    }
+    std::cout << "Speeds: " << fanSpeeds << " ";
+    result = nvmlDeviceGetFanSpeed_v2(device, 1, &fanSpeeds);
+    std::cout << fanSpeeds << std::endl;
 }

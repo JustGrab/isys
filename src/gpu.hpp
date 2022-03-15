@@ -20,9 +20,12 @@ public:
 
     unsigned int getTemp();
     unsigned int getWatts();
+    void getFanSpeeds();
 
 private:
     gpuInfo info;
     nvmlReturn_t result;
     nvmlDevice_t device;
+
+    unsigned int fanSpeeds;
 };
